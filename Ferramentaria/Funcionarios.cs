@@ -14,6 +14,8 @@ namespace Ferramentaria
 
         public string[] Termo { get; set; }
 
+        public int[] Quantidade { get; set; } 
+
 
         //--------------- CONSTRUTORES ---------------\\
         public Funcionarios(string nome, int matricula, string funcao)
@@ -22,6 +24,7 @@ namespace Ferramentaria
             Matricula = matricula;
             Funcao = funcao;
             Termo = new string[10];
+            Quantidade = new int[10];
         }
         
 
@@ -38,6 +41,6 @@ namespace Ferramentaria
             Termo[index] = ferramenta;
         }
 
-        public void RemoverDoTermo(int index) { }
+        public void RemoverDoTermo(int index) { } //
     }
 }

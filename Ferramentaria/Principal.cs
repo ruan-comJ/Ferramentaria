@@ -55,9 +55,9 @@ namespace Ferramentaria
                                 indiceTermo = i;
                                 Console.WriteLine("\nOpções: ");
                                 Console.WriteLine("" +
-                                    "\n1 - Mostrar termo.\n" 
-                                    + "2 - Adicionar item ao termo.\n" 
-                                    + "3 - Remover item do termo\n" 
+                                    "\n1 - Exibir itens do termo.\n"
+                                    + "2 - Adicionar item ao termo.\n"
+                                    + "3 - Remover item do termo\n"
                                     + "4 - Voltar ao menu inicial");
                                 Console.Write("\nEscolha um opção: ");
                                 int opcaoFuncionario = int.Parse(Console.ReadLine());
@@ -66,8 +66,11 @@ namespace Ferramentaria
                                 switch (opcaoFuncionario)
                                 {
                                     case 1:
-                                        for (indiceTermo = 0; indiceTermo < funcionarios[i].Termo.Length && funcionarios[i].Termo[indiceTermo] != null; indiceTermo++)
-                                            Console.WriteLine(indiceTermo + " - " + funcionarios[i].Termo[indiceTermo] + "\n");
+                                        for (indiceTermo = 0; indiceTermo < funcionarios[i].Termo.Length; indiceTermo++)
+                                            if (funcionarios[i].Termo[indiceTermo] != null)
+                                            {
+                                                Console.WriteLine("Item " + indiceTermo + " -> " + funcionarios[i].Termo[indiceTermo] + " - quantidade: " + funcionarios[i].Quantidade[indiceTermo] + "\n");
+                                            }
                                         break;
 
                                     case 2:
@@ -76,24 +79,27 @@ namespace Ferramentaria
                                         {
                                             Console.Write("Insira o nome do item a ser adicionado ao termo do funcionário: ");
                                             funcionarios[i].Termo[indiceTermoAdd] = Console.ReadLine();
+                                            Console.Write("\nInsira a quantidade do item \"" + funcionarios[i].Termo[indiceTermoAdd] + "\" que será adicionado ao termo: ");
+                                            funcionarios[i].Quantidade[indiceTermoAdd] = int.Parse(Console.ReadLine());
                                             Console.Clear();
                                             Console.WriteLine(funcionarios[i].Termo[indiceTermoAdd] + " adicionado ao termo com sucesso!\n");
                                             indiceTermoAdd++;
                                             Console.Write("Deseja adicionar mais itens ao termo (s/n) ? ");
                                             maisItens = char.Parse(Console.ReadLine());
+                                            Console.WriteLine();
                                         }
                                         break;
 
                                     case 3:
                                         for (indiceTermo = 0; indiceTermo < funcionarios[i].Termo.Length && funcionarios[i].Termo[indiceTermo] != null; indiceTermo++)
-                                            Console.WriteLine(indiceTermo + " - " + funcionarios[i].Termo[indiceTermo] + "\n");
+                                            Console.WriteLine("Item " + indiceTermo + " -> " + funcionarios[i].Termo[indiceTermo]  + " - quantidade: " + funcionarios[i].Quantidade[indiceTermo] + "\n");
                                         Console.Write("Escolha o número correspondente ao item para remove-lo do termo: ");
                                         int numRemover = int.Parse(Console.ReadLine());
                                         funcionarios[i].Termo[numRemover] = null;
-                                        Console.WriteLine("Item removido do termo com sucesso!");
+                                        Console.WriteLine("\nItem removido do termo com sucesso!\n");
                                         break;
 
-                                        case 4:
+                                    case 4:
                                         break;
                                 }
 
@@ -103,7 +109,7 @@ namespace Ferramentaria
                         {
                             Console.WriteLine("Matricula não cadastrada no sistema.\n");
                         }
-                        break;
+                        break; // BUSCAR MATRICULA 
 
 
                     case 2:
@@ -118,9 +124,9 @@ namespace Ferramentaria
                         Console.WriteLine("\nFuncionário cadastrado com sucesso!\n");
                         index++;
 
-                        break;
+                        break; // CADASTRAR FUNCIONÁRIO
 
-                    case 3:
+                    case 3: // SAIR
 
                         break;
 
