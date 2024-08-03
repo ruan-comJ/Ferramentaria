@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Ferramentaria
+
 {
     internal class Funcionarios
     {
@@ -12,9 +13,9 @@ namespace Ferramentaria
         public int Matricula { get; private set; }
         public string Funcao { get; set; }
 
-        public string[] Termo { get; set; }
+        public List<string> Termo { get; set; }
 
-        public int[] Quantidade { get; set; } 
+        public List<int> Quantidade { get; set; }
 
 
         //--------------- CONSTRUTORES ---------------\\
@@ -23,24 +24,27 @@ namespace Ferramentaria
             Nome = nome;
             Matricula = matricula;
             Funcao = funcao;
-            Termo = new string[10];
-            Quantidade = new int[10];
+            Termo = [];
+            Quantidade = [];
+
         }
-        
+
 
         //--------------- MÉTODOS ----------------\\
 
-        
-        public void CadastrarFuncionario(int index, string nome, int atricula, string funcao)
+
+        public void AdicionarItemNoTermo(string nomeItem)
         {
-            
-        }
-        
-        public void AdicionarAoTermo(int index, string ferramenta)
-        {
-            Termo[index] = ferramenta;
+            Termo.Add(nomeItem);
         }
 
-        public void RemoverDoTermo(int index) { } //
+
+
+        public void RemoverDoTermo(string nomeItem)
+        {
+            Termo.Remove(nomeItem);
+        }
+
+     
     }
 }

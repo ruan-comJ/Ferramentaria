@@ -1,144 +1,137 @@
 ﻿using System;
-using System.Runtime.InteropServices;
-using System.Runtime.Intrinsics.X86;
-using System.Threading.Channels;
+using System.Collections.Generic;
+using Ferramentaria;
 
-namespace Ferramentaria
+
+List<Funcionarios> funcionarios = [];
+
+int matricula; //Variável global
+
+int opcao = 0;
+
+
+//----------------------------------------------- M E N U  P R I N C I P A L ----------------------------------------------------//
+while (opcao != 3)
 {
-    internal class Principal
+    Console.WriteLine("MENU FERRAMENTARIA\n");
+    Console.WriteLine
+        (
+        "1 - Buscar matricula no sistema\n" +
+        "2 - Cadastrar novo funcionário\n" +
+        "3 - Sair"
+        );
+    Console.Write("\nEscolha uma opção: ");
+    opcao = int.Parse(Console.ReadLine());
+    Console.Clear();
+
+
+    switch (opcao)
     {
-        static void Main(string[] args)
-        {
-
-            Funcionarios[] funcionarios = new Funcionarios[10];
-
-            int matricula; //Variável global
-
-            int opcao = 0;
-            int index = 0;
-            int indiceTermo;
-            int indiceTermoAdd = 0;
-
-            //----------------------------------------------- M E N U  P R I N C I P A L ----------------------------------------------------//
-            while (opcao != 3)
+        case 1:
+            Console.Clear();
+            Console.Write("Insira a matricula do funcionário: ");
+            matricula = int.Parse(Console.ReadLine());
+            Console.WriteLine("\nBuscando matricula no banco de dados..\n");
+            bool encontrado = false;
+            foreach (Funcionarios funcionarioBusca in funcionarios)
             {
-                Console.WriteLine("MENU FERRAMENTARIA\n");
-                Console.WriteLine
-                    (
-                    "1 - Buscar matricula no sistema\n" +
-                    "2 - Cadastrar novo funcionário\n" +
-                    "3 - Sair"
-                    );
-                Console.Write("\nEscolha uma opção: ");
-                opcao = int.Parse(Console.ReadLine());
-                Console.Clear();
-
-
-                switch (opcao)
+                if (funcionarioBusca.Matricula == matricula)
                 {
-                    case 1:
-                        Console.Clear();
-                        Console.Write("Insira a matricula do funcionário: ");
-                        matricula = int.Parse(Console.ReadLine());
-                        Console.WriteLine("\nBuscando matricula no banco de dados..\n");
-                        bool encontrado = false;
-                        for (int i = 0; i < funcionarios.Length; i++)
-                        {
-                            if (funcionarios[i] != null && funcionarios[i].Matricula == matricula)
+                    Console.WriteLine("--------------------------------------------");
+                    Console.WriteLine("Funcionário: " + funcionarioBusca.Nome);
+                    Console.WriteLine("--------------------------------------------");
+                    Console.WriteLine("Função: " + funcionarioBusca.Funcao);
+                    Console.WriteLine("--------------------------------------------");
+                    encontrado = true;
+                    Console.WriteLine("\nOpções: ");
+                    Console.WriteLine("" +
+                        "\n1 - Exibir itens do termo.\n"
+                        + "2 - Adicionar item ao termo.\n"
+                        + "3 - Remover item do termo\n"
+                        + "4 - Voltar ao menu inicial");
+                    Console.Write("\nEscolha um opção: ");
+                    int opcaoFuncionario = int.Parse(Console.ReadLine());
+                    Console.Clear();
+
+                    switch (opcaoFuncionario)
+                    {
+                        case 1:
+                            Console.WriteLine("Itens no termo: \n\n");
+                            foreach (string funcionarioItens in funcionarioBusca.Termo)
                             {
-                                Console.WriteLine("--------------------------------------------");
-                                Console.WriteLine("Funcionário: " + funcionarios[i].Nome);
-                                Console.WriteLine("--------------------------------------------");
-                                Console.WriteLine("Função: " + funcionarios[i].Funcao);
-                                Console.WriteLine("--------------------------------------------");
-                                encontrado = true;
-                                indiceTermo = i;
-                                Console.WriteLine("\nOpções: ");
-                                Console.WriteLine("" +
-                                    "\n1 - Exibir itens do termo.\n"
-                                    + "2 - Adicionar item ao termo.\n"
-                                    + "3 - Remover item do termo\n"
-                                    + "4 - Voltar ao menu inicial");
-                                Console.Write("\nEscolha um opção: ");
-                                int opcaoFuncionario = int.Parse(Console.ReadLine());
-                                Console.Clear();
-
-                                switch (opcaoFuncionario)
-                                {
-                                    case 1:
-                                        for (indiceTermo = 0; indiceTermo < funcionarios[i].Termo.Length; indiceTermo++)
-                                            if (funcionarios[i].Termo[indiceTermo] != null)
-                                            {
-                                                Console.WriteLine("Item " + indiceTermo + " -> " + funcionarios[i].Termo[indiceTermo] + " - quantidade: " + funcionarios[i].Quantidade[indiceTermo] + "\n");
-                                            }
-                                        break;
-
-                                    case 2:
-                                        char maisItens = 's';
-                                        while (maisItens == 's')
-                                        {
-                                            Console.Write("Insira o nome do item a ser adicionado ao termo do funcionário: ");
-                                            funcionarios[i].Termo[indiceTermoAdd] = Console.ReadLine();
-                                            Console.Write("\nInsira a quantidade do item \"" + funcionarios[i].Termo[indiceTermoAdd] + "\" que será adicionado ao termo: ");
-                                            funcionarios[i].Quantidade[indiceTermoAdd] = int.Parse(Console.ReadLine());
-                                            Console.Clear();
-                                            Console.WriteLine(funcionarios[i].Termo[indiceTermoAdd] + " adicionado ao termo com sucesso!\n");
-                                            indiceTermoAdd++;
-                                            Console.Write("Deseja adicionar mais itens ao termo (s/n) ? ");
-                                            maisItens = char.Parse(Console.ReadLine());
-                                            Console.WriteLine();
-                                        }
-                                        break;
-
-                                    case 3:
-                                        for (indiceTermo = 0; indiceTermo < funcionarios[i].Termo.Length && funcionarios[i].Termo[indiceTermo] != null; indiceTermo++)
-                                            Console.WriteLine("Item " + indiceTermo + " -> " + funcionarios[i].Termo[indiceTermo]  + " - quantidade: " + funcionarios[i].Quantidade[indiceTermo] + "\n");
-                                        Console.Write("Escolha o número correspondente ao item para remove-lo do termo: ");
-                                        int numRemover = int.Parse(Console.ReadLine());
-                                        funcionarios[i].Termo[numRemover] = null;
-                                        Console.WriteLine("\nItem removido do termo com sucesso!\n");
-                                        break;
-
-                                    case 4:
-                                        break;
-                                }
-
+                                Console.WriteLine(funcionarioItens + "\n");
                             }
-                        }
-                        if (!encontrado)
-                        {
-                            Console.WriteLine("Matricula não cadastrada no sistema.\n");
-                        }
-                        break; // BUSCAR MATRICULA 
+                            break;
+
+                        case 2:
+                            char maisItens = 's';
+                            while (maisItens == 's')
+                            {
+                                Console.Write("Insira o nome do item a ser adicionado ao termo do funcionário: ");
+                                string nomeItem = Console.ReadLine();
+                                funcionarioBusca.AdicionarItemNoTermo(nomeItem);
+
+                                // AJUSTAR DEPOIS !!!!!!!!!!!
+
+                                // Console.Write("\nInsira a quantidade do item \"" + funcionarios[i].Termo[indiceTermoAdd] + "\" que será adicionado ao termo: ");
+                                // funcionarios[i].Quantidade[indiceTermoAdd] = int.Parse(Console.ReadLine()); 
 
 
-                    case 2:
-                        Console.WriteLine("\nFaça o cadastro de um funcionário");
-                        Console.Write("\nInsira o nome do funcionário : ");
-                        string nome = Console.ReadLine();
-                        Console.Write("\nInsira a matrícula do funcionário: ");
-                        matricula = int.Parse(Console.ReadLine());
-                        Console.Write("\nInsira a função do funcionário: ");
-                        string funcao = Console.ReadLine();
-                        funcionarios[index] = new Funcionarios(nome, matricula, funcao);
-                        Console.WriteLine("\nFuncionário cadastrado com sucesso!\n");
-                        index++;
 
-                        break; // CADASTRAR FUNCIONÁRIO
+                                Console.Clear();
+                                Console.WriteLine(nomeItem + " adicionado ao termo com sucesso!\n");
+                                Console.Write("Deseja adicionar mais itens ao termo (s/n) ? ");
+                                maisItens = char.Parse(Console.ReadLine());
+                                Console.WriteLine();
+                            }
+                            break;
 
-                    case 3: // SAIR
+                        case 3:
+                            int index = 0;
+                            Console.WriteLine("Itens no termo: \n\n");
+                            foreach (string item in funcionarioBusca.Termo)
+                            {
+                                Console.WriteLine("Item " + index + " -> " + item + "\n");
+                                index++;
+                            }
 
-                        break;
+                            Console.Write("Escreva o nome do item para remove-lo do termo: ");
+                            string Remover = (Console.ReadLine());
+                            funcionarioBusca.RemoverDoTermo(Remover);
+                            Console.WriteLine("\nItem removido do termo com sucesso!\n");
+                            break;
 
+                        case 4:
+                            break;
+                    }
 
                 }
-
             }
+            if (!encontrado)
+            {
+                Console.WriteLine("Matricula não cadastrada no sistema.\n");
+            }
+            break; // BUSCAR MATRICULA 
 
 
+        case 2:
+            Console.WriteLine("\nFaça o cadastro de um funcionário");
+            Console.Write("\nInsira o nome do funcionário : ");
+            string nome = Console.ReadLine();
+            Console.Write("\nInsira a matrícula do funcionário: ");
+            matricula = int.Parse(Console.ReadLine());
+            Console.Write("\nInsira a função do funcionário: ");
+            string funcao = Console.ReadLine();
+            funcionarios.Add(new Funcionarios(nome, matricula, funcao));
+            Console.WriteLine("\nFuncionário cadastrado com sucesso!\n");
+
+            break; // CADASTRAR FUNCIONÁRIO
+
+        case 3: // SAIR
+
+            break;
 
 
-
-        }
     }
+
 }
